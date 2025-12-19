@@ -1,0 +1,27 @@
+From 1e5df865c2e0d518a18b3a8cb5fde3c2cf014673 Mon Sep 17 00:00:00 2001
+From: Byben <heybyben@gmail.com>
+Date: Thu, 25 Dec 2025 19:02:33 +0000
+Subject: [PATCH] vendor: custom: Include Updater for non-official builds
+
+Change-Id: I69453e2949bbd2b0c70b640c808ba394edbaeb4c
+---
+ config/ota.mk | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/config/ota.mk b/config/ota.mk
+index b225a7d..2457707 100644
+--- a/config/ota.mk
++++ b/config/ota.mk
+@@ -1,9 +1,6 @@
+ # Updater
+-ifeq ($(IS_OFFICIAL),true)
+ PRODUCT_PACKAGES += \
+     Updater
+ 
+ PRODUCT_COPY_FILES += \
+     vendor/custom/config/permissions/privapp-permissions-custom.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-custom.xml
+-
+-endif
+-- 
+2.43.0
+
