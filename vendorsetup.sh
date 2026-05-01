@@ -101,6 +101,20 @@ release() {
     git status --short
 }
 
+sign() {
+    local top="${ANDROID_BUILD_TOP}"
+    local keys_dir="${top}/vendor/lineage-priv/keys"
+    local keys_repo="https://github.com/heybyben/android_vendor_lineage-priv_keys"
+
+    if [ ! -d "${keys_dir}/.git" ]; then
+        echo "[INFO] Cloning signing keys..."
+        mkdir -p "${top}/vendor/lineage-priv"
+        git clone "${keys_repo}" "${keys_dir}" || return 1
+    else
+        echo "[INFO] Keys already present, skipping clone"
+    fi
+}
+
 enable_updater() {
     cd "${ANDROID_BUILD_TOP}" || exit 1
 
