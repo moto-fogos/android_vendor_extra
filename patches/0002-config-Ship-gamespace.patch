@@ -1,0 +1,28 @@
+From e12b43b4fa3af3440f5dc7aeb9fbcee80e4a0013 Mon Sep 17 00:00:00 2001
+From: Byben <heybyben@luminedroid.org>
+Date: Sun, 3 May 2026 13:54:36 +0000
+Subject: [PATCH] config: Ship gamespace
+
+Change-Id: Ic28882d4e236dc8b015cefc824328b989f344209
+---
+ config/common.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/config/common.mk b/config/common.mk
+index 223bd70..8cebc56 100644
+--- a/config/common.mk
++++ b/config/common.mk
+@@ -41,6 +41,10 @@ PRODUCT_COPY_FILES += \
+     frameworks/native/data/etc/android.hardware.biometrics.face.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.hardware.biometrics.face.xml
+ endif
+ 
++# GameSpace
++PRODUCT_PACKAGES += \
++    GameSpace
++
+ # GMS
+ include vendor/custom/config/pixel.mk
+ 
+-- 
+2.43.0
+

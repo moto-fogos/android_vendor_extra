@@ -115,27 +115,22 @@ sign() {
     fi
 }
 
-enable_updater() {
+enable_patch() {
     cd "${ANDROID_BUILD_TOP}" || exit 1
-
     PATCHES_PATH="${ANDROID_BUILD_TOP}/vendor/extra/patches"
     TARGET_REPO="${ANDROID_BUILD_TOP}/vendor/custom"
-
     [ ! -d "$PATCHES_PATH" ] && return 0
     [ ! -d "$TARGET_REPO/.git" ] && {
         echo "vendor/custom is not a git repo"
         exit 1
     }
-
     cd "$TARGET_REPO" || exit 1
-
     echo "Applying patches to vendor/custom..."
-
-    if ! git am "$PATCHES_PATH"/*.patch --no-gpg-sign; then
+    if ! git am "$PATCHES_PATH"/000{1,2}-*.patch --no-gpg-sign; then
         echo "Failed to apply patches to vendor/custom"
         git am --abort
         exit 1
     fi
-
     echo "All vendor/custom patches applied successfully"
+    cd "${ANDROID_BUILD_TOP}" || exit 1
 }
