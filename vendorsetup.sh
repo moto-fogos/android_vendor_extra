@@ -126,7 +126,7 @@ enable_patch() {
     }
     cd "$TARGET_REPO" || exit 1
     echo "Applying patches to vendor/custom..."
-    if ! git am "$PATCHES_PATH"/000{1,2}-*.patch --no-gpg-sign; then
+    if ! git am "$PATCHES_PATH"/0001-*.patch --no-gpg-sign; then
         echo "Failed to apply patches to vendor/custom"
         git am --abort
         exit 1
