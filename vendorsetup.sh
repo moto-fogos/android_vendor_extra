@@ -118,19 +118,29 @@ sign() {
 enable_patch() {
     cd "${ANDROID_BUILD_TOP}" || exit 1
     PATCHES_PATH="${ANDROID_BUILD_TOP}/vendor/extra/patches"
-    TARGET_REPO="${ANDROID_BUILD_TOP}/vendor/custom"
     [ ! -d "$PATCHES_PATH" ] && return 0
-    [ ! -d "$TARGET_REPO/.git" ] && {
-        echo "vendor/custom is not a git repo"
-        exit 1
-    }
-    cd "$TARGET_REPO" || exit 1
-    echo "Applying patches to vendor/custom..."
-    if ! git am "$PATCHES_PATH"/0001-*.patch --no-gpg-sign; then
-        echo "Failed to apply patches to vendor/custom"
-        git am --abort
-        exit 1
-    fi
-    echo "All vendor/custom patches applied successfully"
-    cd "${ANDROID_BUILD_TOP}" || exit 1
+
+    for project_name in $(cd "${PATCHES_PATH}"; echo */); do
+        project_path="$(tr _ / <<< "$project_name")"
+        cd "${ANDROID_BUILD_TOP}" || exit 1
+
+        if [ ! -d "${project_path}/.git" ]; then
+            echo "Skipping ${project_name}: not a git repo"
+            continue
+        fi
+
+        cd "${project_path}" || exit 1
+        echo "Applying patches to ${project_path}..."
+
+        if ! git am "${PATCHES_PATH}/${project_name}"/*.patch --no-gpg-sign; then
+            echo "Failed to apply patches to ${project_path}. Aborting."
+            git am --abort &>/dev/null
+            exit 1
+        fi
+
+        echo "Done: ${project_path}"
+        cd "${ANDROID_BUILD_TOP}" || exit 1
+    done
+
+    echo "All patches applied successfully"
 }
